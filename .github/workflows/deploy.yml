@@ -1,0 +1,43 @@
+# Rebuilds content.js from the content/ folders and publishes the site on
+# every push to main. In the repo's Settings > Pages, set Source to
+# "GitHub Actions" once.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  # A newer push waits for a running deploy instead of cutting it off midway.
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      # pdftoppm renders the guitar PDFs to images for phones.
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - run: python build.py
+      - uses: actions/configure-pages@v5
+      # build.py puts only what the site uses in _site/, so hidden items,
+      # scripts and notes are not published.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

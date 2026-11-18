@@ -1,0 +1,562 @@
+:root {
+  --ink: #000;
+  --muted: #555;
+  --gutter: 24px;
+  font-family: "IBM Plex Mono", ui-monospace, Menlo, "SF Mono", Consolas,
+    "Courier New", "Liberation Mono", "DejaVu Sans Mono", monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: #fff;
+  /* Stops iPhones enlarging the text when turned sideways. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+* { box-sizing: border-box; }
+
+/* Some elements here set their own display, which would beat the hidden
+   attribute's default. */
+[hidden] { display: none !important; }
+
+/* Nothing may make the page wider than the screen, or phones let it be
+   zoomed out and show white space at the side. */
+html, body { overflow-x: clip; }
+
+/* Every page keeps the scrollbar track, so pages are all the same width
+   and neither the header tabs nor a centred poem shift sideways when a page
+   is long enough to scroll. Phones and Macs draw scrollbars over the page,
+   so this changes nothing there. */
+html { overflow-y: scroll; }
+
+body {
+  margin: 0;
+  background: #fff;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+a, button {
+  color: var(--ink);
+  text-decoration: none;
+  font: inherit;
+  font-weight: 400;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Hover styles only for real pointers: on a touch screen :hover sticks to
+   whatever was tapped last. */
+a:focus-visible, button:focus-visible { background: var(--ink); color: #fff; }
+@media (hover: hover) {
+  a:hover, button:hover { background: var(--ink); color: #fff; }
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Header: a full-width black band. It has no bottom padding because the
+   tabs sit on its bottom edge, and its side padding equals the gap between
+   tabs so the outer tabs sit as far from the screen edge as from each other. */
+.site-header {
+  --tab: #b4b4b4;
+  --bar: #000;
+  --tab-gap: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--tab-gap);
+  /* On iPhones held sideways the bar runs under the notch to the screen
+     edge; the tabs stay clear of it (viewport-fit=cover in the pages). */
+  padding: 17px max(var(--tab-gap), env(safe-area-inset-right, 0px)) 0 max(var(--tab-gap), env(safe-area-inset-left, 0px));
+  background: var(--bar);
+  font-size: 16px;
+}
+
+/* All header links are grey folder tabs hanging from the bar: the name
+   on the left (home) and the sections on the right, all the same width.
+   The current one is white with no gap below, so it runs straight into the
+   page like an open folder. */
+.site-header a {
+  display: block;
+  width: 22ch;
+  padding: 5px 0 4px;
+  border-radius: 6px 6px 0 0;
+  background: var(--tab);
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+}
+.site-header a:focus-visible { background: #dcdcdc; color: var(--ink); }
+@media (hover: hover) {
+  .site-header a:hover { background: #dcdcdc; color: var(--ink); }
+}
+.site-header a[aria-current="page"],
+.site-header a[aria-current="page"]:hover { background: #fff; padding-top: 7px; margin-top: -2px; }
+
+.site-header nav { display: flex; gap: var(--tab-gap); align-items: flex-end; }
+
+.site-header :focus-visible { outline-color: #fff; }
+
+main {
+  flex: 1;
+  margin: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px));
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Home */
+.home {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 32px 64px;
+  padding: 18vh 0 96px;
+}
+
+.home h1 {
+  margin: 0 0 16px;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.icons {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icons a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 400;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: #f6f6f6;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.icons img { width: 18px; height: 18px; display: block; }
+/* Typewriter keys, like the buttons on the other pages. */
+.icons a:focus-visible { background: #fff; }
+@media (hover: hover) {
+  .icons a:hover { background: #fff; box-shadow: 1px 1px 0 var(--ink); }
+}
+.icons a:active { box-shadow: 0 0 0 var(--ink); transform: translate(2px, 2px); }
+/* A finger-sized touch area without making the icons bigger. */
+.icons a::after { content: ""; position: absolute; inset: -6px; }
+
+.home .photo {
+  width: 180px;
+  height: 180px;
+  display: block;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Viewer shared by paintings and poems */
+.viewer {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 24px;
+}
+
+.meta h2 {
+  display: inline;
+  margin: 0;
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.meta .caption { color: var(--muted); }
+.meta .caption::before { content: " -- "; color: var(--muted); }
+
+/* One highlighter tab per item, standing on the rule like an index tab.
+   The others are translucent; the current one is solid and taller. */
+/* With more tabs than fit, the row scrolls sideways (viewer.js keeps the
+   current one in view). Right alignment comes from the first tab's auto
+   margin, because flex-end alignment would push the overflow off the left
+   edge where it can't be scrolled to. */
+.item-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.item-tabs::-webkit-scrollbar { display: none; }
+.item-tabs button:first-child { margin-left: auto; }
+/* One fixed width on every page; nine fit the poem column exactly, and
+   more than fit scroll. */
+.item-tabs button {
+  flex: 0 0 64px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px 6px 0 0;
+  font-size: 15px;
+  line-height: 28px;
+  color: var(--ink);
+  background: var(--highlight);
+}
+.item-tabs button:focus-visible,
+.item-tabs button[aria-current] { background: var(--highlight-solid); color: var(--ink); }
+.item-tabs button:focus-visible { outline-offset: -2px; }
+@media (hover: hover) {
+  .item-tabs button:hover { background: var(--highlight-solid); color: var(--ink); }
+}
+.item-tabs button[aria-current] { height: 35px; }
+/* Highlighter colours in order yellow, orange, red, green, blue. Both
+   shades are see-through so they sit softly on the white; the current tab
+   is the stronger one. */
+.item-tabs button:nth-child(5n+1) { --highlight: rgba(255, 245, 0, 0.3); --highlight-solid: rgba(255, 245, 0, 0.6); }
+.item-tabs button:nth-child(5n+2) { --highlight: rgba(255, 145, 30, 0.22); --highlight-solid: rgba(255, 145, 30, 0.5); }
+.item-tabs button:nth-child(5n+3) { --highlight: rgba(240, 70, 70, 0.2); --highlight-solid: rgba(240, 70, 70, 0.45); }
+.item-tabs button:nth-child(5n+4) { --highlight: rgba(60, 190, 80, 0.2); --highlight-solid: rgba(60, 190, 80, 0.45); }
+.item-tabs button:nth-child(5n+5) { --highlight: rgba(50, 150, 255, 0.2); --highlight-solid: rgba(50, 150, 255, 0.45); }
+
+/* Prev/next: the same round outlined buttons on every viewer page, fixed
+   to the sides of the screen so they sit in the same place everywhere. */
+.side-arrow {
+  position: fixed;
+  top: 50%;
+  z-index: 5;
+  width: 52px;
+  height: 52px;
+  margin-top: -26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: #f6f6f6;
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+  touch-action: manipulation;
+}
+/* Round typewriter keys, pressed the same way as the buttons. */
+.side-arrow:focus-visible { background: #fff; color: var(--ink); }
+@media (hover: hover) {
+  .side-arrow:hover { background: #fff; color: var(--ink); box-shadow: 1px 1px 0 var(--ink); }
+}
+.side-arrow:active { box-shadow: 0 0 0 var(--ink); transform: translate(2px, 2px); }
+.side-arrow.prev { left: calc(16px + env(safe-area-inset-left, 0px)); }
+.side-arrow.next { right: calc(16px + env(safe-area-inset-right, 0px)); }
+.side-arrow svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Paintings fill the viewport below the header without page scroll. */
+.paintings-page { height: 100vh; height: 100dvh; }
+.paintings-page main { display: flex; flex-direction: column; }
+/* The gaps above the painting and above the rule shrink on short windows
+   (laptops at high scaling), so the painting keeps a useful size. */
+.paintings-page .viewer { flex: 1; display: flex; flex-direction: column; min-height: 0; padding: clamp(24px, 7vh, 72px) 0 0; }
+
+/* Side padding keeps the painting clear of the fixed arrows. */
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: 0 96px;
+}
+
+.frame {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The painting links to its full-size file, where phones can zoom it. */
+.frame a {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+.frame a:focus-visible { background: none; }
+@media (hover: hover) {
+  .frame a:hover { background: none; }
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* One row under the rule: title, buttons, then the tabs hanging upside down
+   from the rule at the far right. The tabs take their own space in the row
+   (scrolling when there are many), so they never cover the title. */
+.paintings-page .bar {
+  margin-top: clamp(24px, 7vh, 72px);
+  padding: 0 0 24px;
+  border-top: 1px solid var(--ink);
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+}
+.paintings-page .meta { flex: 0 0 auto; max-width: 45%; padding-top: 23px; }
+.paintings-page .actions { flex: none; align-self: center; padding-top: 23px; margin-left: 24px; }
+/* The title keeps its natural width (up to 45% of the row); the tabs take
+   what is left and scroll when there are more than fit. */
+.paintings-page .item-tabs { order: 1; flex: 1 1 0; min-width: 88px; margin-left: auto; align-items: flex-start; }
+.paintings-page .item-tabs button { border-radius: 0 0 6px 6px; }
+
+.paintings-page .meta h2 { display: block; font-size: 24px; line-height: 1.3; }
+.paintings-page .meta .caption::before { content: none; }
+.paintings-page .meta .caption { display: block; margin-top: 8px; font-size: 16px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 20px; }
+/* Typewriter keys: a light key with a hard shadow that shrinks as it is
+   pressed. */
+.button {
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  padding: 6px 14px;
+  background: #f6f6f6;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.button:focus-visible { background: #fff; color: var(--ink); }
+@media (hover: hover) {
+  .button:hover { background: #fff; color: var(--ink); box-shadow: 1px 1px 0 var(--ink); }
+}
+.button:active { box-shadow: 0 0 0 var(--ink); transform: translate(2px, 2px); }
+
+/* Poems: a typed sheet in a readable measure. */
+.poems-page .viewer {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+.poems-page .meta h2 { font-size: 18px; }
+.poems-page .byline { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+
+/* The poem's tabs stand on the rule, so the bar has no bottom padding and
+   the title carries it instead. */
+.poems-page .bar {
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 32px;
+  align-items: flex-end;
+}
+.poems-page .meta { padding-bottom: 12px; }
+/* The title always has its own line, with the tabs on the rule below it. */
+.poems-page .meta { flex-basis: 100%; }
+.poems-page .item-tabs { flex: 1 1 100%; }
+
+.poem { line-height: 1.75; }
+
+/* Each line wraps with a hanging indent, so a wrapped line never reads
+   as a new one on narrow screens. */
+.poem .line {
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  padding-left: 6ch;
+  text-indent: -6ch;
+  min-height: 1.75em;
+}
+
+/* Guitar: the paintings layout with a PDF in the frame. */
+.guitar-page .frame iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 1px solid var(--ink);
+  background: #fff;
+}
+
+/* Touch screens get the PDF's pages as images, stacked and scrolling like
+   a poem (see guitar.html). */
+.pdf-as-images { height: auto; min-height: 100vh; min-height: 100svh; }
+.pdf-as-images .stage { flex: none; }
+.pages {
+  flex: 1;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pages a { display: block; }
+.pages a:focus-visible { background: none; }
+@media (hover: hover) {
+  .pages a:hover { background: none; }
+}
+.frame .pages img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: fill;
+  display: block;
+  border: 1px solid var(--ink);
+}
+
+
+/* Below this width four full-size tabs no longer fit, so they split the row
+   into equal columns and the labels shrink with the screen. */
+@media (max-width: 900px) {
+  /* nav's display: contents lets its three tabs join the name tab as four
+     equal columns of the header grid. */
+  .site-header {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    font-size: min(16px, 2.3vw);
+  }
+  .site-header nav { display: contents; }
+  .site-header a { width: auto; }
+}
+
+/* Phones on their side: there is no room for painting and caption on one
+   screen, so the painting takes the screen and the caption sits below it. */
+@media (max-height: 500px) and (min-width: 601px) {
+  .paintings-page { height: auto; }
+  .paintings-page .viewer { padding-top: 16px; }
+  .stage { flex: none; height: calc(100vh - 72px); height: calc(100svh - 72px); padding: 0; }
+  .pdf-as-images .stage { height: auto; }
+  .paintings-page .bar { margin-top: 16px; }
+}
+
+@media (max-width: 600px) {
+  /* A quarter of a phone is too narrow for the name on one line, so labels may
+     wrap and every tab stretches to the tallest one. */
+  /* Never below 11px, so labels stay readable on a 280px Fold cover screen
+     and grow with Android's page zoom. */
+  .site-header { --tab-gap: 4px; align-items: stretch; font-size: max(11px, 3.6vw); }
+  .site-header a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    line-height: 1.25;
+    padding: 5px 2px 4px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root { --gutter: 16px; font-size: 14px; }
+  .home { padding: 64px 0 48px; gap: 32px; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-items: center; text-align: center; }
+  .home .icons { justify-content: center; }
+  .home .photo { width: 150px; height: 150px; }
+  .home h1 { font-size: 26px; }
+  .bar { flex-direction: column; align-items: stretch; gap: 8px; }
+
+  .side-arrow { width: 44px; height: 44px; }
+
+  /* The page may grow past the screen (long captions, PDF pages), so the
+     painting sits at its natural height with the caption right under it.
+     svh is the screen with the browser's toolbars showing. */
+  .paintings-page { height: auto; min-height: 100vh; min-height: 100svh; }
+  .stage { flex: none; padding: 0; }
+  .paintings-page .viewer { padding-top: 24px; }
+  .paintings-page .bar { margin-top: 24px; padding: 0 0 24px; align-items: stretch; gap: 20px; }
+  .paintings-page .meta h2 { font-size: 20px; }
+  .paintings-page .meta .caption { margin-top: 6px; font-size: 15px; }
+  .paintings-page .meta, .paintings-page .actions { padding-top: 0; align-self: auto; }
+  .paintings-page .actions { margin: 8px 0 0; }
+  .paintings-page .frame img { height: auto; max-height: calc(100vh - 250px); max-height: calc(100svh - 250px); }
+  .guitar-page .frame iframe { height: calc(100vh - 250px); height: calc(100svh - 250px); }
+  /* The link hugs the painting, so a tap beside it does nothing. */
+  .frame a { flex: none; align-self: center; max-width: 100%; }
+  .paintings-page .frame img { width: auto; max-width: 100%; }
+  /* No room to overlay the title, so the tabs hang from the rule in the flow. */
+  .paintings-page .item-tabs { order: 0; margin-left: 0; }
+  .paintings-page .meta { max-width: none; }
+  /* Five tabs span the rule; more than five scroll sideways. */
+  .item-tabs { width: 100%; }
+  .item-tabs button { flex: 0 0 calc((100% - 16px) / 5); min-width: 44px; padding: 0 4px; }
+
+  .poem { font-size: 13.5px; }
+  .poems-page .viewer { padding-top: 20px; }
+  .poems-page .bar { flex-direction: row; flex-wrap: wrap; align-items: flex-end; margin-bottom: 24px; gap: 0; }
+  .poems-page .meta { flex-basis: 100%; padding-bottom: 8px; }
+  .poems-page .item-tabs { flex-basis: 100%; }
+}
+
+/* Phones and phones on their side: fixed arrows would sit on top of the
+   text, so they follow the content instead, one at each side. */
+@media (max-width: 600px), (max-height: 500px) {
+  .paintings-page main, .poems-page main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: start;
+  }
+  /* min-width: 0 lets a long tab row scroll inside the column instead of
+     widening the page. */
+  .paintings-page .viewer, .poems-page .viewer { grid-column: 1 / -1; width: 100%; min-width: 0; }
+  .side-arrow { position: static; margin: 0; }
+  .side-arrow.next { justify-self: end; }
+  .paintings-page, .poems-page { padding-bottom: 24px; }
+  .paintings-page .bar { padding-bottom: 20px; }
+  .poems-page .viewer { padding-bottom: 32px; }
+}
+
+/* Between phones and wide desktops (phones on their side, unfolded
+   foldables, tablets upright, narrow windows) the caption row is too narrow
+   for title, buttons and tabs side by side, so the tabs get their own row
+   hanging from the rule, as on phones. */
+@media (min-width: 601px) and (max-width: 1100px) {
+  .paintings-page .bar { flex-wrap: wrap; row-gap: 0; }
+  .paintings-page .item-tabs { order: 0; flex: 1 1 100%; margin-left: 0; }
+  .paintings-page .meta, .paintings-page .actions { padding-top: 16px; }
+  .paintings-page .meta { max-width: 60%; }
+}
+
+/* The fixed side arrows need 52px plus a margin on each side of the poem. */
+@media (min-width: 601px) and (min-height: 501px) {
+  .poems-page .viewer { max-width: min(68ch, 100% - 104px); }
+}
+
+/* Touch screens: finger-sized buttons and header tabs. */
+@media (any-pointer: coarse) {
+  .button { min-height: 44px; display: inline-flex; align-items: center; }
+  .site-header a { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+}
+
+.empty { padding: 48px 0; color: var(--muted); }

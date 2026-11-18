@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- The site is designed light only; this stops browsers auto-darkening it. -->
+<meta name="color-scheme" content="only light">
+<title>Michael Burgess</title>
+<link rel="icon" href="images/favicon.svg?v=7" type="image/svg+xml">
+<link rel="icon" href="images/favicon.png?v=7" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap">
+<link rel="stylesheet" href="style.css?v=38">
+</head>
+<body class="paintings-page guitar-page">
+<header class="site-header">
+  <a href="index.html">Michael Burgess</a>
+  <nav aria-label="Main">
+    <a href="paintings.html">Paintings</a>
+    <a href="poems.html">Poems</a>
+    <a href="guitar.html" aria-current="page">Guitar</a>
+  </nav>
+</header>
+<main>
+  <section class="viewer" aria-label="Guitar tabs">
+    <div class="stage">
+      <div class="frame"><iframe id="pdf" title="Guitar tab"></iframe><div class="pages" id="pages" hidden></div></div>
+    </div>
+    <div class="bar">
+      <div class="item-tabs" id="item-tabs" role="group" aria-label="Guitar tabs"></div>
+      <div class="meta"><h2 id="title"></h2><span class="caption" id="caption"></span></div>
+      <div class="actions">
+        <a class="button" id="open" target="_blank" rel="noopener">OPEN PDF</a>
+        <a class="button" id="download" download>DOWNLOAD</a>
+      </div>
+    </div>
+  </section>
+  <button type="button" class="side-arrow prev" id="prev" aria-label="Previous tab">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+  </button>
+  <button type="button" class="side-arrow next" id="next" aria-label="Next tab">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</main>
+<script src="content.js?v=e09d87c1"></script>
+<script src="viewer.js?v=5"></script>
+<script>
+// The file name a download is saved under, e.g. "harbour-at-dusk.jpg".
+function downloadName(title, file) {
+  var slug = title.toLowerCase().replace(/['\u2019]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return (slug || "download") + file.slice(file.lastIndexOf("."));
+}
+// Phones and tablets can't show a PDF inside the page (Android shows
+// nothing, iPhones only page 1), so touch screens get the build's page images.
+var showImages = !navigator.pdfViewerEnabled || matchMedia("(any-pointer: coarse)").matches;
+if (showImages) {
+  document.body.classList.add("pdf-as-images");
+  // Phones save the PDF rather than show it, so DOWNLOAD covers it.
+  document.getElementById("open").hidden = true;
+  document.getElementById("pdf").remove();
+  document.getElementById("pages").hidden = false;
+}
+
+startViewer(CONTENT.guitar, function (tab) {
+  if (showImages) {
+    var pages = document.getElementById("pages");
+    pages.replaceChildren();
+    tab.pages.forEach(function (file, i) {
+      var link = document.createElement("a");
+      link.href = file;
+      var image = document.createElement("img");
+      image.src = file;
+      image.alt = tab.title + ", page " + (i + 1) + " of " + tab.pages.length;
+      link.appendChild(image);
+      pages.appendChild(link);
+    });
+    window.scrollTo(0, 0);
+  } else {
+    // Replacing the iframe's location instead of setting src keeps PDF page
+    // turns out of the browser history.
+    // navpanes=0 hides Chrome's page-thumbnail sidebar, which eats the frame.
+    document.getElementById("pdf").contentWindow.location.replace(tab.file + "#navpanes=0");
+  }
+  document.getElementById("title").textContent = tab.title;
+  document.getElementById("caption").textContent =
+    [tab.key && "Key: " + tab.key, tab.year].filter(Boolean).join(", ");
+  document.getElementById("open").href = tab.file;
+  var download = document.getElementById("download");
+  download.href = tab.file;
+  download.setAttribute("download", downloadName(tab.title, tab.file));
+});
+</script>
+</body>
+</html>

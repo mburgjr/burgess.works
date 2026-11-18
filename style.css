@@ -496,9 +496,10 @@ main {
   .stage { flex: none; padding: 0; }
   .paintings-page .viewer { padding-top: 24px; }
   .paintings-page .bar { margin-top: 24px; padding: 0 0 24px; align-items: stretch; gap: 20px; }
-  /* Paintings get a wider margin all round than the edge of the page; guitar
-     sheets keep the full width so the notes stay readable. */
-  .paintings-page:not(.guitar-page) .stage { padding: 0 8px; }
+  /* Paintings get a wider page margin, and the line, title and buttons share
+     it, so they are exactly as wide as the widest painting. Guitar sheets
+     keep the full width so the notes stay readable. */
+  .paintings-page:not(.guitar-page) { --gutter: 24px; }
   .paintings-page:not(.guitar-page) .viewer { padding-top: 36px; }
   .paintings-page:not(.guitar-page) .bar { margin-top: 36px; }
   .paintings-page .meta h2 { font-size: 20px; }
@@ -518,7 +519,9 @@ main {
   .paintings-page .meta { max-width: none; }
   /* Five tabs span the rule; more than five scroll sideways. */
   .item-tabs { width: 100%; }
-  .item-tabs button { flex: 0 0 calc((100% - 16px) / 5); min-width: 44px; padding: 0 4px; }
+  /* The tabs share the line equally so they all fit; past about ten they
+     reach their 28px minimum and the row scrolls. A lone tab stays tab-sized. */
+  .item-tabs button { flex: 1 1 0; min-width: 28px; max-width: 64px; padding: 0 2px; font-size: 14px; }
 
   .poem { font-size: 13.5px; }
   .poems-page .viewer { padding-top: 20px; }
@@ -576,6 +579,13 @@ main {
   .paintings-page .actions { flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; }
   .paintings-page .actions .side-arrow { flex: none; }
 }
+@media (max-width: 600px) {
+  .paintings-page .actions { gap: 8px; }
+}
+/* The narrowest phones keep the standard 16px margin for the painting. */
+@media (max-width: 339px) {
+  .paintings-page:not(.guitar-page) { --gutter: 16px; }
+}
 /* Small phones: slimmer buttons so arrows and both buttons still fit. */
 @media (max-width: 374px) {
   .paintings-page .actions { gap: 8px; }
@@ -585,6 +595,7 @@ main {
 /* Fold cover screens and other very narrow phones: no room for one row, so
    the buttons share the first row and the arrows go below at each end. */
 @media (max-width: 319px) {
+  .item-tabs button { min-width: 24px; font-size: 13px; }
   .paintings-page .actions { flex-wrap: wrap; row-gap: 12px; }
   .paintings-page .actions .button { flex: 1 1 calc(50% - 4px); justify-content: center; }
   .paintings-page .actions .side-arrow { order: 1; }

@@ -506,10 +506,10 @@ main {
   .paintings-page, .poems-page { --gutter: 24px; }
   /* Poems read best in a slightly narrower column. */
   .poems-page { --gutter: 32px; }
-  /* 36px between the header and the content, and between the content and
-     the line, on every page. */
+  /* 36px between the header and the content on every page; a little less
+     (28px) from a painting or guitar sheet down to its line. */
   .paintings-page .viewer, .poems-page .viewer { padding-top: 36px; }
-  .paintings-page .bar { margin-top: 36px; }
+  .paintings-page .bar { margin-top: 28px; }
   .paintings-page .meta h2 { font-size: 20px; }
   .paintings-page .meta .caption { margin-top: 6px; font-size: 15px; }
   .paintings-page .meta, .paintings-page .actions { padding-top: 0; align-self: auto; }
@@ -529,7 +529,7 @@ main {
   .item-tabs { width: 100%; }
   /* The tabs share the line equally so they all fit; past about ten they
      reach their 28px minimum and the row scrolls. A lone tab stays tab-sized. */
-  .item-tabs button { flex: 1 1 0; min-width: 28px; max-width: 64px; padding: 0 2px; font-size: 14px; }
+  .item-tabs button { flex: 1 1 0; min-width: 28px; max-width: 64px; padding: 0 2px; font-size: 12px; }
 
   .poem { font-size: 13.5px; }
   .poems-page .bar { flex-direction: row; flex-wrap: wrap; align-items: flex-end; margin-bottom: 24px; gap: 0; }
@@ -608,7 +608,7 @@ main {
 /* Fold cover screens and other very narrow phones: no room for one row, so
    the buttons share the first row and the arrows go below at each end. */
 @media (max-width: 319px) {
-  .item-tabs button { min-width: 24px; font-size: 13px; }
+  .item-tabs button { min-width: 24px; font-size: 11px; }
   .paintings-page .actions { flex-wrap: wrap; row-gap: 12px; }
   .paintings-page .actions .button { flex: 1 1 calc(50% - 4px); justify-content: center; }
   .paintings-page .actions .side-arrow { order: 1; }

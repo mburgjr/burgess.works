@@ -496,10 +496,10 @@ main {
   .stage { flex: none; padding: 0; }
   .paintings-page .viewer { padding-top: 24px; }
   .paintings-page .bar { margin-top: 24px; padding: 0 0 24px; align-items: stretch; gap: 20px; }
-  /* Paintings get a wider page margin, and the line, title and buttons share
-     it, so they are exactly as wide as the widest painting. Guitar sheets
-     keep the full width so the notes stay readable. */
-  .paintings-page:not(.guitar-page) { --gutter: 24px; }
+  /* Paintings, poems and guitar tabs share one wider page margin, so every
+     page is the same width and the line, title and buttons are exactly as
+     wide as the widest painting. */
+  .paintings-page, .poems-page { --gutter: 24px; }
   .paintings-page:not(.guitar-page) .viewer { padding-top: 36px; }
   .paintings-page:not(.guitar-page) .bar { margin-top: 36px; }
   .paintings-page .meta h2 { font-size: 20px; }
@@ -582,9 +582,9 @@ main {
 @media (max-width: 600px) {
   .paintings-page .actions { gap: 8px; }
 }
-/* The narrowest phones keep the standard 16px margin for the painting. */
+/* The narrowest phones keep the standard 16px margin. */
 @media (max-width: 339px) {
-  .paintings-page:not(.guitar-page) { --gutter: 16px; }
+  .paintings-page, .poems-page { --gutter: 16px; }
 }
 /* Small phones: slimmer buttons so arrows and both buttons still fit. */
 @media (max-width: 374px) {

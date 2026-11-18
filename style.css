@@ -496,17 +496,25 @@ main {
   .stage { flex: none; padding: 0; }
   .paintings-page .viewer { padding-top: 24px; }
   .paintings-page .bar { margin-top: 24px; padding: 0 0 24px; align-items: stretch; gap: 20px; }
+  /* Paintings get a wider margin all round than the edge of the page; guitar
+     sheets keep the full width so the notes stay readable. */
+  .paintings-page:not(.guitar-page) .stage { padding: 0 8px; }
+  .paintings-page:not(.guitar-page) .viewer { padding-top: 36px; }
+  .paintings-page:not(.guitar-page) .bar { margin-top: 36px; }
   .paintings-page .meta h2 { font-size: 20px; }
   .paintings-page .meta .caption { margin-top: 6px; font-size: 15px; }
   .paintings-page .meta, .paintings-page .actions { padding-top: 0; align-self: auto; }
-  .paintings-page .actions { margin: 8px 0 0; }
+  /* The bar's 20px gap: the same space as from the tab row to the title. */
+  .paintings-page .actions { margin: 0; }
   .paintings-page .frame img { height: auto; max-height: calc(100vh - 250px); max-height: calc(100svh - 250px); }
   .guitar-page .frame iframe { height: calc(100vh - 250px); height: calc(100svh - 250px); }
   /* The link hugs the painting, so a tap beside it does nothing. */
   .frame a { flex: none; align-self: center; max-width: 100%; }
   .paintings-page .frame img { width: auto; max-width: 100%; }
   /* No room to overlay the title, so the tabs hang from the rule in the flow. */
-  .paintings-page .item-tabs { order: 0; margin-left: 0; }
+  /* flex: none keeps the row its natural height in this column; the
+     desktop flex: 1 1 0 would squash it to nothing. */
+  .paintings-page .item-tabs { order: 0; margin-left: 0; flex: none; }
   .paintings-page .meta { max-width: none; }
   /* Five tabs span the rule; more than five scroll sideways. */
   .item-tabs { width: 100%; }
@@ -560,3 +568,24 @@ main {
 }
 
 .empty { padding: 48px 0; color: var(--muted); }
+
+/* Phones and phones on their side: the arrows join the buttons in one row,
+   one arrow at each end, all four spaced evenly instead of the arrows
+   getting a row of their own. */
+@media (max-width: 600px), (max-height: 500px) {
+  .paintings-page .actions { flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .paintings-page .actions .side-arrow { flex: none; }
+}
+/* Small phones: slimmer buttons so arrows and both buttons still fit. */
+@media (max-width: 374px) {
+  .paintings-page .actions { gap: 8px; }
+  .paintings-page .actions .button { padding: 6px 10px; font-size: 13px; }
+  .paintings-page .actions .side-arrow { width: 40px; height: 40px; }
+}
+/* Fold cover screens and other very narrow phones: no room for one row, so
+   the buttons share the first row and the arrows go below at each end. */
+@media (max-width: 319px) {
+  .paintings-page .actions { flex-wrap: wrap; row-gap: 12px; }
+  .paintings-page .actions .button { flex: 1 1 calc(50% - 4px); justify-content: center; }
+  .paintings-page .actions .side-arrow { order: 1; }
+}

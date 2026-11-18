@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap">
-<link rel="stylesheet" href="style.css?v=39">
+<link rel="stylesheet" href="style.css?v=42">
 </head>
 <body class="paintings-page guitar-page">
 <header class="site-header">
@@ -32,17 +32,18 @@
       <div class="item-tabs" id="item-tabs" role="group" aria-label="Guitar tabs"></div>
       <div class="meta"><h2 id="title"></h2><span class="caption" id="caption"></span></div>
       <div class="actions">
+        <!-- Pinned to the window sides on desktop; on phones they share this row with the buttons. -->
+        <button type="button" class="side-arrow prev" id="prev" aria-label="Previous tab">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </button>
         <a class="button" id="open" target="_blank" rel="noopener">OPEN PDF</a>
         <a class="button" id="download" download>DOWNLOAD</a>
+        <button type="button" class="side-arrow next" id="next" aria-label="Next tab">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </div>
     </div>
   </section>
-  <button type="button" class="side-arrow prev" id="prev" aria-label="Previous tab">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-  </button>
-  <button type="button" class="side-arrow next" id="next" aria-label="Next tab">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-  </button>
 </main>
 <script src="content.js?v=e09d87c1"></script>
 <script src="viewer.js?v=5"></script>
